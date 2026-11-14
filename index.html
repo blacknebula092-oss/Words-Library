@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
+<title>Words Library — A Library of Thoughts</title>
+<style>
+:root{--bg:#fff;--panel:#f6f6f6;--card:#fff;--text:#111;--muted:#777;--line:#e7e7e7;--accent:#111;--shadow:0 12px 35px rgba(0,0,0,.06)}
+body.dark{--bg:#101010;--panel:#191919;--card:#151515;--text:#f5f5f5;--muted:#aaa;--line:#303030;--accent:#fff;--shadow:0 12px 35px rgba(0,0,0,.2)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;transition:.2s}
+button,input,select{font:inherit}button{cursor:pointer}
+.wrap{width:min(1120px,92%);margin:auto}
+header{border-bottom:1px solid var(--line);position:sticky;top:0;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px);z-index:5}
+.nav{height:70px;display:flex;align-items:center;justify-content:center;gap:16px;position:relative}
+.brand{font-weight:850;letter-spacing:-1px;font-size:20px;text-align:center}.brand span{font-weight:400;color:var(--muted)}
+.actions{display:flex;gap:8px;position:absolute;right:0}.iconbtn,.softbtn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:10px 14px}
+.hero{padding:76px 0 42px;text-align:center}.eyebrow{text-transform:uppercase;letter-spacing:3px;color:var(--muted);font-size:11px;font-weight:700}
+h1{font-size:clamp(38px,7vw,76px);letter-spacing:-4px;line-height:1.02;margin:18px 0}.hero p{color:var(--muted);max-width:590px;margin:0 auto 28px;line-height:1.7}
+.search{display:flex;max-width:650px;margin:auto;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:6px;box-shadow:var(--shadow)}
+.search input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:var(--text);padding:12px}
+.primary{background:var(--accent);color:var(--bg);border:0;border-radius:10px;padding:12px 18px;font-weight:700}
+main{padding-bottom:70px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 18px;flex-wrap:wrap}
+.tabs{display:flex;gap:8px;overflow:auto;padding:3px 0 9px;scrollbar-width:thin}
+.chip{white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);padding:9px 14px;font-size:13px}
+.chip.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.filters{display:flex;gap:8px;align-items:center}.filters select{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--card);color:var(--text)}
+.stats{color:var(--muted);font-size:13px;margin:10px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.quote{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:22px;min-height:205px;display:flex;flex-direction:column;box-shadow:0 3px 15px rgba(0,0,0,.018);transition:transform .18s,border .18s}
+.quote:hover{transform:translateY(-3px);border-color:var(--muted)}
+.quote-top{display:flex;justify-content:space-between;gap:8px;align-items:center;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.fav{border:0;background:transparent;color:var(--muted);font-size:20px;padding:0 3px}.fav.on{color:#d44}
+.quote-text{font-family:Georgia,serif;font-size:20px;line-height:1.48;letter-spacing:-.3px;margin:20px 0;flex:1}
+.quote-en{font-family:Georgia,serif;color:var(--muted);font-size:14px;line-height:1.5;margin-top:-10px;margin-bottom:17px}
+.quote-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:12px}
+.copy{border:0;background:transparent;color:var(--text);font-size:12px;font-weight:700;padding:5px}
+.empty{grid-column:1/-1;text-align:center;padding:60px 15px;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
+.more{display:flex;justify-content:center;gap:10px;margin:28px 0}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:12px;text-align:center}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--text);color:var(--bg);padding:11px 17px;border-radius:999px;font-size:13px;transition:.2s;z-index:10}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.hero{padding:55px 0 25px}h1{letter-spacing:-2px}.grid{grid-template-columns:1fr}.quote{min-height:180px}.nav{height:62px}.toolbar{align-items:stretch}.filters{width:100%}.filters select{flex:1}.search .primary{padding:11px 13px}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav"><div class="brand">Rasya</div><div class="actions"><button class="iconbtn" id="favOnly" title="Favorit">♡ <span id="favCount">0</span></button><button class="iconbtn" id="theme" title="Ganti tema">☾</button></div></div></header>
+<section class="hero wrap">
+ <div class="eyebrow">A library of thoughts</div>
+ <h1>Words that<br>stay with you.</h1>
+ <p>Kumpulan kata-kata untuk mengingatkan, menguatkan, dan menemani perjalanan hidupmu. Find the words you need.</p>
+</section>
+<main class="wrap">
+ <div class="toolbar"><div class="tabs" id="tabs"></div><div class="filters"><select id="language"><option value="all">Semua bahasa</option><option value="id">Indonesia</option><option value="en">English</option><option value="both">Bilingual</option></select><select id="sort"><option value="default">Urutan awal</option><option value="az">A–Z</option><option value="random">Acak</option></select></div></div>
+ <div class="stats" id="stats">Memuat koleksi...</div>
+ <div class="grid" id="grid"></div>
+ <div class="more"><button class="softbtn" id="randomBtn">✦ Kata acak</button><button class="primary" id="loadMore">Muat lebih banyak</button></div>
+</main>
+<footer><div class="wrap">WORDS LIBRARY · Keep the words that move you. <span id="totalFooter"></span></div></footer>
+<div class="toast" id="toast">Disalin!</div>
+<script>
+const categories = [
+ {id:"Motivasi", en:"Motivation", a:["Langkah kecil yang dilakukan hari ini lebih berarti daripada rencana besar yang terus ditunda.","Kamu tidak harus hebat untuk memulai, tetapi kamu harus memulai untuk menjadi lebih baik.","Jangan ukur kemajuanmu dari kecepatan orang lain; ukur dari keberanianmu untuk terus bergerak.","Disiplin adalah cara menghormati tujuan yang pernah kamu pilih.","Kesulitan bukan tanda bahwa kamu harus berhenti; itu tanda bahwa kamu sedang belajar."], b:["Small steps taken today matter more than big plans postponed forever.","You do not have to be great to start, but you have to start to become better.","Measure your progress by your courage to keep moving, not by someone else's speed.","Discipline is how you respect the goals you once chose.","Difficulty is not a sign to stop; it is a sign that you are learning."]},
+ {id:"Kehidupan",en:"Life",a:["Hidup tidak selalu berjalan sesuai rencana, tetapi selalu memberi ruang untuk menentukan langkah berikutnya.","Tidak semua hal harus dipahami hari ini; beberapa jawaban datang bersama waktu.","Ketenangan tumbuh saat kamu berhenti memaksa hal-hal di luar kendalimu.","Hidup yang bermakna dibangun dari pilihan kecil yang dilakukan dengan sadar.","Jangan sibuk mengejar hari esok sampai lupa menjalani hari ini."],b:["Life does not always follow the plan, but it always leaves room for your next step.","Not everything needs to be understood today; some answers arrive with time.","Peace grows when you stop forcing what is beyond your control.","A meaningful life is built from small choices made with intention.","Do not chase tomorrow so hard that you forget to live today."]},
+ {id:"Cinta",en:"Love",a:["Cinta yang sehat tidak meminta seseorang kehilangan dirinya sendiri.","Perhatian sederhana sering berbicara lebih jujur daripada janji yang besar.","Menghargai seseorang berarti juga menghormati batas dan pilihannya.","Rasa sayang seharusnya membuatmu bertumbuh, bukan mengecil.","Kepercayaan dibangun lewat tindakan yang konsisten, bukan kata-kata sesaat."],b:["Healthy love never asks someone to lose themselves.","Simple care often speaks more honestly than grand promises.","Respecting someone also means respecting their boundaries and choices.","Affection should help you grow, not make you smaller.","Trust is built through consistent actions, not temporary words."]},
+ {id:"Persahabatan",en:"Friendship",a:["Teman yang baik tidak selalu punya jawaban, tetapi bersedia mendengarkan.","Persahabatan kuat bukan karena selalu bersama, melainkan karena saling menghargai.","Pilih lingkungan yang membuatmu berani menjadi lebih baik.","Kejujuran yang disampaikan dengan baik lebih berharga daripada pujian palsu.","Teman sejati ikut senang saat kamu berkembang."],b:["A good friend may not have every answer, but is willing to listen.","Strong friendship is not about always being together, but about mutual respect.","Choose a circle that makes you brave enough to grow.","Kind honesty is worth more than false praise.","True friends are happy to see you grow."]},
+ {id:"Kesedihan",en:"Sadness",a:["Tidak apa-apa mengambil jeda; yang penting jangan menyerah pada dirimu sendiri.","Hari yang berat tidak menentukan seluruh masa depanmu.","Perasaan boleh datang dan pergi, tetapi kamu tetap bisa memilih langkah yang baik.","Meminta bantuan bukan kelemahan; itu bagian dari keberanian.","Pelan-pelan juga merupakan bentuk kemajuan."],b:["It is okay to take a pause; just do not give up on yourself.","A difficult day does not define your entire future.","Feelings may come and go, but you can still choose a good next step.","Asking for help is not weakness; it is part of courage.","Slow progress is still progress."]},
+ {id:"Kebijaksanaan",en:"Wisdom",a:["Orang bijak tidak merasa harus memenangkan setiap perdebatan.","Dengarkan untuk memahami, bukan sekadar menunggu giliran berbicara.","Pengetahuan memberi informasi; kebijaksanaan mengajarkan cara menggunakannya.","Mengakui kesalahan adalah awal dari keputusan yang lebih baik.","Jangan biarkan ego membuatmu menolak bukti."],b:["Wise people do not feel the need to win every argument.","Listen to understand, not merely to wait for your turn to speak.","Knowledge gives information; wisdom teaches how to use it.","Admitting a mistake is the beginning of a better decision.","Do not let ego make you reject evidence."]},
+ {id:"Kesuksesan",en:"Success",a:["Kesuksesan yang bertahan dibangun dengan proses, bukan jalan pintas.","Target yang jelas membuat usaha lebih terarah.","Hasil besar sering lahir dari kebiasaan kecil yang diulang.","Jangan hanya ingin terlihat berhasil; bangun kemampuan yang nyata.","Kegagalan adalah data untuk memperbaiki strategi berikutnya."],b:["Lasting success is built through process, not shortcuts.","Clear goals make effort more focused.","Big results often grow from small habits repeated consistently.","Do not just want to look successful; build real ability.","Failure is data for improving your next strategy."]},
+ {id:"Pengembangan Diri",en:"Self Growth",a:["Kenali kekuranganmu tanpa menjadikannya alasan untuk berhenti berkembang.","Versi terbaik dirimu dibangun lewat keputusan yang kamu ambil setiap hari.","Berani berubah berarti siap meninggalkan kebiasaan yang tidak lagi membantu.","Jangan menunggu percaya diri untuk mencoba; kepercayaan diri tumbuh dari latihan.","Evaluasi dirimu dengan jujur, lalu perbaiki satu hal pada satu waktu."],b:["Know your weaknesses without using them as a reason to stop growing.","Your best self is built through the decisions you make every day.","Changing takes courage because it means leaving unhelpful habits behind.","Do not wait for confidence to try; confidence grows through practice.","Evaluate yourself honestly, then improve one thing at a time."]},
+ {id:"Islami",en:"Islamic",a:["Doa menguatkan hati, sementara usaha menunjukkan kesungguhan.","Bersyukur bukan berarti berhenti berusaha; syukur membuat usaha lebih bermakna.","Jaga niat dalam kebaikan, bahkan ketika tidak ada yang melihat.","Sabar bukan pasif; sabar adalah tetap memilih kebaikan dalam proses yang sulit.","Ilmu yang bermanfaat seharusnya membuat kita semakin rendah hati."],b:["Prayer strengthens the heart, while effort shows sincerity.","Gratitude does not mean giving up effort; it gives effort deeper meaning.","Keep your intentions sincere, even when no one is watching.","Patience is not passivity; it is choosing what is right through difficulty.","Useful knowledge should make us more humble."]},
+ {id:"Deep Thoughts",en:"Deep Thoughts",a:["Kadang yang paling sulit bukan menemukan jawaban, melainkan berani menerima kenyataan.","Kita sering takut berubah, padahal diam pun punya konsekuensi.","Tidak semua yang ramai itu penting, dan tidak semua yang sunyi itu kosong.","Pikiran yang jernih lahir dari keberanian mempertanyakan asumsi sendiri.","Waktu terus berjalan, bahkan ketika kita sibuk menunda."],b:["Sometimes the hardest part is not finding an answer, but accepting the truth.","We often fear change, forgetting that staying still has consequences too.","Not everything loud is important, and not everything quiet is empty.","Clear thinking begins with the courage to question our own assumptions.","Time keeps moving, even while we keep postponing."]},
+ {id:"Kepemimpinan",en:"Leadership",a:["Pemimpin yang baik memberi arah sekaligus bersedia mendengar.","Tanggung jawab dimulai saat kamu berhenti menyalahkan keadaan.","Keberanian mengambil keputusan harus berjalan bersama kesediaan menerima akibat.","Jangan meminta orang lain disiplin jika kamu sendiri mengabaikan aturan.","Kepemimpinan bukan soal paling keras berbicara, tetapi paling konsisten bertindak."],b:["A good leader gives direction and remains willing to listen.","Responsibility begins when you stop blaming circumstances.","The courage to decide must come with the willingness to own the outcome.","Do not demand discipline from others while ignoring the rules yourself.","Leadership is not about speaking the loudest, but acting consistently."]},
+ {id:"Pendidikan",en:"Education",a:["Belajar bukan sekadar mengumpulkan nilai, tetapi melatih cara berpikir.","Pertanyaan yang baik sering menjadi awal dari pemahaman yang dalam.","Kesalahan saat belajar adalah kesempatan untuk menemukan cara yang lebih tepat.","Jangan malu belum tahu; yang perlu dihindari adalah menolak belajar.","Ilmu menjadi kuat ketika dipahami, diuji, dan diterapkan."],b:["Learning is not just collecting grades; it is training how to think.","A good question is often the beginning of deep understanding.","Mistakes in learning are chances to find a better method.","Never be ashamed of not knowing; avoid refusing to learn.","Knowledge becomes strong when understood, tested, and applied."]},
+ {id:"Keluarga",en:"Family",a:["Keluarga yang baik memberi ruang untuk tumbuh dan belajar dari kesalahan.","Perhatian kecil di rumah dapat menjadi kenangan yang besar.","Menghormati keluarga juga berarti belajar berbicara dengan jujur dan baik.","Rumah bukan selalu tempat yang sempurna, tetapi bisa menjadi tempat saling menguatkan.","Luangkan waktu untuk orang yang hadir dalam perjalanan hidupmu."],b:["A good family gives room to grow and learn from mistakes.","Small acts of care at home can become lasting memories.","Respecting family also means learning to speak honestly and kindly.","Home may not be perfect, but it can be a place of mutual support.","Make time for the people who are part of your journey."]},
+ {id:"Filosofi",en:"Philosophy",a:["Kebebasan selalu datang bersama tanggung jawab atas pilihan.","Kebenaran tidak berubah hanya karena banyak orang menolaknya.","Sederhana bukan berarti kurang; terkadang itu berarti tahu apa yang cukup.","Pertanyakan keyakinanmu, tetapi jangan menolak fakta yang tidak kamu sukai.","Makna hidup tidak hanya ditemukan, tetapi juga dibentuk melalui tindakan."],b:["Freedom always comes with responsibility for your choices.","Truth does not change simply because many people reject it.","Simple does not mean lacking; sometimes it means knowing what is enough.","Question your beliefs, but do not reject facts you dislike.","The meaning of life is not only found; it is shaped through action."]},
+ {id:"Keberanian",en:"Courage",a:["Berani bukan berarti tidak takut, melainkan tetap memilih langkah yang tepat.","Katakan yang benar dengan sopan, bahkan ketika itu tidak populer.","Keputusan sulit sering menjadi latihan untuk karakter yang kuat.","Jangan biarkan rasa takut mengambil semua keputusan untukmu.","Memulai kembali membutuhkan keberanian yang tidak kecil."],b:["Courage is not the absence of fear; it is choosing the right step despite it.","Speak the truth respectfully, even when it is unpopular.","Difficult decisions often train strong character.","Do not let fear make every decision for you.","Starting again takes no small amount of courage."]},
+ {id:"Waktu",en:"Time",a:["Waktu yang hilang tidak bisa dikembalikan, tetapi waktu berikutnya masih bisa digunakan.","Prioritaskan hal penting sebelum hal mendesak mengambil alih.","Kebiasaan menunda membuat tugas kecil terasa semakin berat.","Gunakan waktumu untuk hal yang mendekatkanmu pada tujuan.","Tidak semua kesempatan datang dua kali; belajarlah mengenali waktunya."],b:["Lost time cannot be returned, but the next moment can still be used well.","Prioritize what matters before urgency takes over.","Procrastination makes small tasks feel heavier over time.","Use your time for things that bring you closer to your goals.","Not every opportunity comes twice; learn to recognize its moment."]}
+];
+const suffixID=[
+" Jadikan pengalaman itu bekal untuk mengambil keputusan yang lebih matang.",
+" Sisihkan waktu untuk memahami apa yang sebenarnya kamu butuhkan.",
+" Keberanian tumbuh ketika kamu tetap bertindak dengan pertimbangan yang jernih.",
+" Jangan biarkan pendapat sesaat mengalahkan prinsip yang sudah kamu pikirkan.",
+" Pilihan hari ini ikut membentuk kesempatan yang akan kamu temui esok.",
+" Beri perhatian pada kemajuan yang sering luput dari pandanganmu.",
+" Tidak semua jalan cepat membawa kamu ke tempat yang tepat.",
+" Rawat rasa ingin tahu agar pikiranmu tidak berhenti berkembang.",
+" Belajar membedakan hal yang penting dari hal yang hanya menarik perhatian.",
+" Keteguhan terlihat dari kesediaan memperbaiki diri setelah menerima masukan.",
+" Buat keputusan berdasarkan alasan yang bisa kamu pertanggungjawabkan.",
+" Hargai orang lain tanpa harus mengorbankan batasan yang sehat.",
+" Gunakan kegagalan sebagai bahan evaluasi, bukan sebagai identitas diri.",
+" Jangan menukar tujuan jangka panjang dengan kenyamanan sesaat.",
+" Perubahan yang berarti sering dimulai dari kebiasaan yang tidak terlihat.",
+" Beri ruang bagi fakta untuk mengubah pendapat yang keliru.",
+" Ambil jeda saat perlu, lalu kembali dengan pikiran yang lebih teratur.",
+" Jadilah konsisten meskipun hasilnya belum mendapat perhatian siapa pun.",
+" Ukur keberhasilan dari nilai yang kamu pegang, bukan tepuk tangan semata.",
+" Selesaikan hal yang sudah kamu mulai dengan tanggung jawab.",
+" Masa depan lebih terbantu oleh tindakan nyata daripada kekhawatiran."
+];
+const suffixEN=[
+" Let the experience prepare you for more thoughtful decisions.",
+" Make time to understand what you genuinely need.",
+" Courage grows when you act with clear judgment.",
+" Do not let passing opinions outweigh principles you have considered.",
+" Today's choices help shape the opportunities you meet tomorrow.",
+" Notice the progress that often escapes your attention.",
+" Not every fast route leads to the right destination.",
+" Keep your curiosity alive so your thinking can keep growing.",
+" Learn to separate what matters from what merely attracts attention.",
+" Steadiness shows in the willingness to improve after receiving feedback.",
+" Make decisions for reasons you can responsibly stand behind.",
+" Respect others without giving up healthy boundaries.",
+" Use failure as material for review, not as your identity.",
+" Do not trade long-term aims for temporary comfort.",
+" Meaningful change often begins with an unseen habit.",
+" Give facts room to change an incorrect opinion.",
+" Pause when needed, then return with a clearer mind.",
+" Stay consistent even when nobody notices the effort.",
+" Measure success by your values, not applause alone.",
+" Finish what you start with a sense of responsibility.",
+" The future benefits more from action than from worry."
+];
+// 16 kategori × 5 ide dasar × 21 pengembangan × 3 format = 5.040 entri bilingual; setiap entri memiliki teks berbeda.
+const quotes=[];
+let serial=1;
+categories.forEach((c,ci)=>c.a.forEach((base,bi)=>{
+ for(let v=0;v<21;v++){
+  const idText=v===0?base:base.replace(/[.!?]$/,"")+suffixID[v];
+  const enText=v===0?c.b[bi]:c.b[bi].replace(/[.!?]$/,"")+suffixEN[v];
+  const forms=[
+   [idText,enText],
+   ["“"+idText+"”","“"+enText+"”"],
+   [idText+" — sebuah pengingat untuk hari ini.",enText+" — a reminder for today."]
+  ];
+  forms.forEach((pair,fi)=>quotes.push({id:serial,serial:serial++,cat:c.id,catEn:c.en,id:pair[0],en:pair[1],lang:"both"}));
+ }
+}));
+const grid=document.getElementById("grid"),tabs=document.getElementById("tabs"),stats=document.getElementById("stats");
+const language=document.getElementById("language"),sort=document.getElementById("sort");
+let category="Semua",page=1,pageSize=18,favOnly=false,randomOrder=[];
+const favorites=new Set(JSON.parse(localStorage.getItem("wl_favorites")||"[]"));
+const categoriesList=["Semua",...categories.map(c=>c.id)];
+categoriesList.forEach(c=>{const b=document.createElement("button");b.className="chip"+(c==="Semua"?" active":"");b.textContent=c;b.onclick=()=>{category=c;page=1;document.querySelectorAll(".chip").forEach(x=>x.classList.toggle("active",x.textContent===c));render()};tabs.appendChild(b)});
+function filtered(){
+ let arr=quotes.filter(q=>(category==="Semua"||q.cat===category)&&(!favOnly||favorites.has(q.serial))&&
+  (language.value==="all"||language.value==="both"||language.value==="id"||language.value==="en")&&
+  true);
+ if(language.value==="id")arr=arr.map(q=>({...q,display:q.id,secondary:""}));
+ else if(language.value==="en")arr=arr.map(q=>({...q,display:q.en,secondary:""}));
+ else arr=arr.map(q=>({...q,display:q.id,secondary:q.en}));
+ if(sort.value==="az")arr.sort((a,b)=>a.display.localeCompare(b.display));
+ if(sort.value==="random")arr.sort((a,b)=>((a.serial*9301+49297)%233280)-((b.serial*9301+49297)%233280));
+ return arr;
+}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){
+ const arr=filtered(),shown=arr.slice(0,page*pageSize);
+ stats.textContent=`Menampilkan ${shown.length.toLocaleString("id-ID")} dari ${arr.length.toLocaleString("id-ID")} kata-kata · Total koleksi ${quotes.length.toLocaleString("id-ID")} entri`;
+ document.getElementById("totalFooter").textContent=`${quotes.length.toLocaleString("id-ID")} entries`;
+ document.getElementById("favCount").textContent=favorites.size;
+ grid.innerHTML=shown.length?shown.map(q=>`<article class="quote"><div class="quote-top"><span>${escapeHTML(q.cat)} · ${String(q.serial).padStart(4,"0")}</span><button class="fav ${favorites.has(q.serial)?"on":""}" data-fav="${q.serial}" aria-label="Favorit">${favorites.has(q.serial)?"♥":"♡"}</button></div><div class="quote-text">${escapeHTML(q.display)}</div>${q.secondary?`<div class="quote-en">${escapeHTML(q.secondary)}</div>`:""}<div class="quote-bottom"><span>${escapeHTML(q.catEn)}</span><button class="copy" data-copy="${q.serial}">SALIN ↗</button></div></article>`).join(""):`<div class="empty">Tidak ada kata-kata yang cocok.<br>Coba kata kunci atau kategori lain.</div>`;
+ document.getElementById("loadMore").style.display=shown.length<arr.length?"inline-block":"none";
+}
+grid.addEventListener("click",e=>{
+ const f=e.target.closest("[data-fav]"),c=e.target.closest("[data-copy]");
+ if(f){const id=Number(f.dataset.fav);favorites.has(id)?favorites.delete(id):favorites.add(id);localStorage.setItem("wl_favorites",JSON.stringify([...favorites]));render()}
+ if(c){const q=quotes.find(x=>x.id===Number(c.dataset.copy));const text=language.value==="en"?q.en:language.value==="id"?q.id:q.id+"\n"+q.en;navigator.clipboard?.writeText(text).then(()=>toast("Kata-kata berhasil disalin!")).catch(()=>toast("Clipboard tidak tersedia di browser ini."))}
+});
+function toast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1800)}
+language.addEventListener("change",render);sort.addEventListener("change",render);
+document.getElementById("loadMore").onclick=()=>{page++;render()};
+document.getElementById("favOnly").onclick=()=>{favOnly=!favOnly;document.getElementById("favOnly").style.background=favOnly?"var(--panel)":"var(--card)";page=1;render()};
+document.getElementById("randomBtn").onclick=()=>{const arr=filtered();if(!arr.length)return toast("Tidak ada kata-kata.");const q=arr[Math.floor(Math.random()*arr.length)];toast(q.id);};
+document.getElementById("theme").onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("wl_dark",document.body.classList.contains("dark"));document.getElementById("theme").textContent=document.body.classList.contains("dark")?"☀":"☾"};
+if(localStorage.getItem("wl_dark")==="true"){document.body.classList.add("dark");document.getElementById("theme").textContent="☀"}
+render();
+</script>
+</body>
+</html>
